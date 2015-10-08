@@ -35,16 +35,15 @@ public class Main extends Activity implements NavigationDrawerFragment.Navigatio
     {
         super.onCreate(savedInstanceState);
 
+        // Set up navigation drawer
+        initializeUI();
+
         // First time here?
         if ( !Settings.isLoggedIn(this) )
         {
             // Go to login
             navigateToLogin();
-            return;
         }
-
-        // Set up navigation drawer
-        initializeUI();
     }
 
     private void navigateToLogin()
