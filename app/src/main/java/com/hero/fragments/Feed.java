@@ -1,17 +1,18 @@
 package com.hero.fragments;
 
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.hero.R;
 import com.hero.config.Logging;
+import com.hero.fragments.adapters.ChallengeAdapter;
 import com.hero.logic.challenges.ChallangesAPI;
 import com.hero.model.Challenge;
 import com.hero.ui.AlertDialogBuilder;
@@ -24,6 +25,9 @@ public class Feed extends Fragment
     boolean mIsReloading;
 
     ProgressBar mLoading;
+
+    ListView mChallengeList;
+    ChallengeAdapter mChallengeAdapter;
 
     List<Challenge> mUpdatedChallenges;
     List<Challenge> mDisplayedChallenges;
@@ -40,7 +44,12 @@ public class Feed extends Fragment
 
         // View caching
         mLoading = (ProgressBar)rootView.findViewById(R.id.loading);
+        mChallengeList = (ListView)rootView.findViewById(R.id.challenges);
 
+        // Adapter init
+        mChallengeAdapter = new ChallengeAdapter(getActivity(), mDisplayedChallenges, R.layout.item_challenge);
+
+        // All done
         return rootView;
     }
 
@@ -72,8 +81,11 @@ public class Feed extends Fragment
             // Prevent concurrent reload
             mIsReloading = true;
 
-            // Show the circular progress
-            mLoading.setVisibility(View.VISIBLE);
+            // Show the circular progress (if no challenges)
+            if ( mDisplayedChallenges.size() == 0 )
+            {
+                mLoading.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override

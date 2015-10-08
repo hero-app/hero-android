@@ -23,4 +23,6 @@
     <string name="user_image">user_image</string>
     <string name="user_id">user_id</string>
     <string name="user_fbid">user_fbid</string>
+    <string name="placeHolder">Placeholder</string>
+    <string name="title_activity_challenge">Challenge</string>
 </resources>

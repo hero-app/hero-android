@@ -90,7 +90,7 @@ public class Main extends Activity implements NavigationDrawerFragment.Navigatio
     @Override
     public void onNavigationDrawerItemSelected(int position)
     {
-        // Current fragment
+        // Default fragment
         Fragment fragment = null;
 
         // Convert from array to human position

@@ -2,7 +2,6 @@ package com.hero.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,20 +16,12 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.hero.R;
-import com.hero.config.API;
 import com.hero.config.Logging;
 import com.hero.logic.login.UserLogin;
-import com.hero.model.request.login.LoginRequest;
-import com.hero.model.response.login.LoginResponse;
 import com.hero.ui.AlertDialogBuilder;
-import com.hero.utils.Settings;
-import com.hero.utils.caching.Singleton;
-import com.hero.utils.networking.HTTP;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class Login extends Activity
 {
@@ -42,7 +33,7 @@ public class Login extends Activity
     {
         super.onCreate(savedInstanceState);
 
-        // Initialize app
+        // Initialize Facebook SDK
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
 
@@ -52,10 +43,13 @@ public class Login extends Activity
 
     private void initializeUI()
     {
+        // Load login layout
         setContentView(R.layout.activity_login);
 
+        // Get login button by ID
         mLoginButton = (ImageView) findViewById(R.id.login_button);
 
+        // Handle login button click
         mLoginButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -79,14 +73,14 @@ public class Login extends Activity
             @Override
             public void onCancel()
             {
-                // App code
+                // Alert user via Toast
                 Toast.makeText(Login.this, "Login cancelled", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(FacebookException exception)
             {
-                // App code
+                // Alert user via Toast
                 Toast.makeText(Login.this, "Login error: " + exception.toString(), Toast.LENGTH_LONG).show();
             }
         });
@@ -100,7 +94,6 @@ public class Login extends Activity
         // Pass it on to Facebook SDK
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
 
     public class LoginAsync extends AsyncTask<LoginResult, String, Exception>
     {
@@ -160,6 +153,7 @@ public class Login extends Activity
             // Success?
             if ( exc == null )
             {
+                // All done here
                 goToMain();
             }
             else
