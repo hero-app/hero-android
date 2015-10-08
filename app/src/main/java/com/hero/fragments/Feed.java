@@ -14,12 +14,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.hero.R;
-import com.hero.activities.ChallengeView;
+import com.hero.activities.Challenge;
 import com.hero.config.Logging;
-import com.hero.constants.ChallengeViewExtras;
+import com.hero.constants.ChallengeActivityExtras;
 import com.hero.fragments.adapters.ChallengeAdapter;
 import com.hero.logic.challenges.ChallangesAPI;
-import com.hero.model.Challenge;
 import com.hero.ui.AlertDialogBuilder;
 import com.hero.utils.caching.Singleton;
 
@@ -36,8 +35,8 @@ public class Feed extends Fragment
     ListView mChallengeList;
     ChallengeAdapter mChallengeAdapter;
 
-    List<Challenge> mUpdatedChallenges;
-    List<Challenge> mDisplayedChallenges;
+    List<com.hero.model.Challenge> mUpdatedChallenges;
+    List<com.hero.model.Challenge> mDisplayedChallenges;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -86,7 +85,7 @@ public class Feed extends Fragment
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
             {
                 // Get pressed item
-                Challenge item = mDisplayedChallenges.get(position);
+                com.hero.model.Challenge item = mDisplayedChallenges.get(position);
 
                 // Prepare JSON
                 String json = "";
@@ -103,10 +102,10 @@ public class Feed extends Fragment
                 }
 
                 // Prepare view intent
-                Intent challengeView = new Intent(getActivity(), ChallengeView.class);
+                Intent challengeView = new Intent(getActivity(), Challenge.class);
 
                 // Insert challenge
-                challengeView.putExtra(ChallengeViewExtras.CHALLENGE_EXTRA, json);
+                challengeView.putExtra(ChallengeActivityExtras.CHALLENGE_EXTRA, json);
 
                 // Open challenge view
                 startActivity(challengeView);
@@ -162,7 +161,7 @@ public class Feed extends Fragment
         @Override
         protected Exception doInBackground(Integer... params)
         {
-            List<Challenge> challenges;
+            List<com.hero.model.Challenge> challenges;
 
             try
             {

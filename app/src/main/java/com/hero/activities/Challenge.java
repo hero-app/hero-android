@@ -3,7 +3,7 @@ package com.hero.activities;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.media.MediaPlayer;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.hero.R;
 import com.hero.config.Logging;
-import com.hero.constants.ChallengeViewExtras;
-import com.hero.model.Challenge;
+import com.hero.constants.ChallengeActivityExtras;
+import com.hero.constants.VideoActivityExtras;
 import com.hero.model.Participant;
 import com.hero.model.ParticipantVideo;
 import com.hero.ui.AlertDialogBuilder;
@@ -31,9 +31,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 
-public class ChallengeView extends Activity
+public class Challenge extends Activity
 {
-    Challenge mChallenge;
+    com.hero.model.Challenge mChallenge;
 
     TextView mRules;
     TextView mTitle;
@@ -205,7 +205,7 @@ public class ChallengeView extends Activity
                 public void onClick(View view)
                 {
                     // Launch video
-                    new DecodeVideoAsync().execute(participant.video);
+                    new PlayVideoAsync().execute(participant.video);
                 }
             });
 
@@ -214,15 +214,15 @@ public class ChallengeView extends Activity
         }
     }
 
-    public class DecodeVideoAsync extends AsyncTask<ParticipantVideo, String, Exception>
+    public class PlayVideoAsync extends AsyncTask<ParticipantVideo, String, Exception>
     {
         ParticipantVideo mVideo;
         ProgressDialog mLoading;
 
-        public DecodeVideoAsync()
+        public PlayVideoAsync()
         {
             // Loading dialog
-            mLoading = new ProgressDialog(ChallengeView.this);
+            mLoading = new ProgressDialog(Challenge.this);
 
             // Prevent cancel
             mLoading.setCancelable(false);
@@ -242,8 +242,8 @@ public class ChallengeView extends Activity
 
             try
             {
-                // Decode the base64-encoded video and save it to external storage
-                mVideo.file = VideoDecoder.decodeBase64Video(mVideo.data, ChallengeView.this);
+                // Cache the video (if not already cached)
+                mVideo.file = VideoDecoder.getCachedVideoPath(mVideo.url, Challenge.this);
             }
             catch (Exception exc)
             {
@@ -282,7 +282,7 @@ public class ChallengeView extends Activity
                 Log.e(Logging.TAG, "Video decode failed", exc);
 
                 // Build the dialog
-                AlertDialogBuilder.showGenericDialog(getString(R.string.error), exc.toString(), ChallengeView.this, null);
+                AlertDialogBuilder.showGenericDialog(getString(R.string.error), exc.toString(), Challenge.this, null);
             }
         }
     }
@@ -296,38 +296,24 @@ public class ChallengeView extends Activity
         }
 
         // Create a new player (recreate it every time)
-        MediaPlayer player = new MediaPlayer();
+        Intent videoIntent = new Intent(this, Video.class);
 
-        try
-        {
-            // Set path to video file
-            player.setDataSource(video.file);
+        // Set video path
+        videoIntent.putExtra(VideoActivityExtras.VIDEO_PATH, video.file);
 
-            // Prepare the media player (must call before start())
-            player.prepare();
-
-            // Finally, start playing the video file (in a new window)
-            player.start();
-        }
-        catch( Exception exc )
-        {
-            // Log it
-            Log.e(Logging.TAG, "Video play failed", exc);
-
-            // Build the dialog
-            AlertDialogBuilder.showGenericDialog(getString(R.string.error), exc.toString(), ChallengeView.this, null);
-        }
+        // Start video activity
+        startActivity(videoIntent);
     }
 
     private void unpackChallenge()
     {
         // Get challenge JSON
-        String json = getIntent().getStringExtra(ChallengeViewExtras.CHALLENGE_EXTRA);
+        String json = getIntent().getStringExtra(ChallengeActivityExtras.CHALLENGE_EXTRA);
 
         try
         {
             // Convert JSON to object
-            mChallenge = Singleton.getJackson().readValue(json, Challenge.class);
+            mChallenge = Singleton.getJackson().readValue(json, com.hero.model.Challenge.class);
         }
         catch( Exception exc )
         {

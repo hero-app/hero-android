@@ -7,8 +7,8 @@ public class ParticipantVideo
     @JsonProperty("preview")
     public String preview;
 
-    @JsonProperty("data")
-    public String data;
+    @JsonProperty("url")
+    public String url;
 
     @JsonProperty("file")
     public String file;
