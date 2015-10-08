@@ -52,7 +52,7 @@ public class Feed extends Fragment
         mChallengeList = (ListView)rootView.findViewById(R.id.challenges);
 
         // Adapter init
-        mChallengeAdapter = new ChallengeAdapter(getActivity(), mDisplayedChallenges, R.layout.item_challenge);
+        mChallengeAdapter = new ChallengeAdapter(getActivity(), mDisplayedChallenges, R.layout.list_item_challenge);
 
         // Link to list
         mChallengeList.setAdapter(mChallengeAdapter);
