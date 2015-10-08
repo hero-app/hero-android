@@ -68,8 +68,6 @@ public class HTTP
             throw new Exception(response.getStatusLine().toString() + "\n" + responseText);
         }
 
-
-
         // We're good
         return responseText;
     }

@@ -1,21 +1,26 @@
 package com.hero.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.hero.R;
+import com.hero.activities.ChallengeView;
 import com.hero.config.Logging;
+import com.hero.constants.ChallengeViewExtras;
 import com.hero.fragments.adapters.ChallengeAdapter;
 import com.hero.logic.challenges.ChallangesAPI;
 import com.hero.model.Challenge;
 import com.hero.ui.AlertDialogBuilder;
+import com.hero.utils.caching.Singleton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +54,47 @@ public class Feed extends Fragment
         // Adapter init
         mChallengeAdapter = new ChallengeAdapter(getActivity(), mDisplayedChallenges, R.layout.item_challenge);
 
+        // Link to list
+        mChallengeList.setAdapter(mChallengeAdapter);
+
+        // Handle challenge list click
+        mChallengeList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
+            {
+                // Get pressed item
+                Challenge item = mDisplayedChallenges.get(position);
+
+                // Prepare JSON
+                String json = "";
+
+                try
+                {
+                    // Convert challenge to JSON
+                    json = Singleton.getJackson().writeValueAsString(item);
+                }
+                catch( Exception exc )
+                {
+                    // Log it
+                    Log.e(Logging.TAG, "Challenge JSON decoding failed", exc);
+                }
+
+                // Prepare view intent
+                Intent challengeView = new Intent(getActivity(), ChallengeView.class);
+
+                // Insert challenge
+                challengeView.putExtra(ChallengeViewExtras.CHALLENGE_EXTRA, json);
+
+                // Open challenge view
+                startActivity(challengeView);
+            }
+        });
+
         // All done
         return rootView;
     }
+
 
     @Override
     public void onResume()
@@ -72,6 +115,9 @@ public class Feed extends Fragment
 
         // Add all the updated challenges
         mDisplayedChallenges.addAll(mUpdatedChallenges);
+
+        // Items changed
+        mChallengeAdapter.notifyDataSetChanged();
     }
 
     public class LoadFeedAsync extends AsyncTask<Integer, String, Exception>
@@ -118,7 +164,7 @@ public class Feed extends Fragment
         protected void onPostExecute(Exception exc)
         {
             // No longer reloading
-            mIsReloading = true;
+            mIsReloading = false;
 
             // Activity dead?
             if (getActivity() == null || getActivity().isFinishing())
