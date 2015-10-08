@@ -1,9 +1,14 @@
 package com.hero.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,9 +20,12 @@ import com.hero.config.Logging;
 import com.hero.constants.ChallengeViewExtras;
 import com.hero.model.Challenge;
 import com.hero.model.Participant;
+import com.hero.model.ParticipantVideo;
+import com.hero.ui.AlertDialogBuilder;
 import com.hero.ui.images.CircularImageTransformation;
 import com.hero.utils.caching.Singleton;
 import com.hero.utils.formatting.StringUtils;
+import com.hero.utils.media.VideoDecoder;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -141,12 +149,173 @@ public class ChallengeView extends Activity
             return;
         }
 
-        
+        // Get inflater service
+        LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // Traverse participants
-        for ( Participant participant : mChallenge.participants )
+        for ( final Participant participant : mChallenge.participants )
         {
-            // Inflate participant layout
+            // Inflate the layout
+            View participantView = layoutInflater.inflate(R.layout.activity_challenge_participant, null);
+
+            // Cache views
+            TextView name = (TextView)participantView.findViewById(R.id.name);
+            ImageView image = (ImageView)participantView.findViewById(R.id.image);
+            ImageView preview = (ImageView)participantView.findViewById(R.id.videoPreview);
+            ProgressBar loading = (ProgressBar)participantView.findViewById(R.id.loading);
+
+            // Change progress bar color (we need @color/accent to be grey for sidebar)
+            loading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.primary), android.graphics.PorterDuff.Mode.SRC_IN);
+
+            // Set metadata
+            name.setText(participant.user.name);
+
+            // Load video preview (if exists)
+            if ( ! StringUtils.stringIsNullOrEmpty(participant.video.preview))
+            {
+                // Show loading
+                mLoading.setVisibility(View.VISIBLE);
+
+                // Actually load preview
+                Picasso.with(this).load(participant.video.preview).into(preview, new Callback()
+                {
+                    @Override
+                    public void onSuccess()
+                    {
+                        // Hide loading
+                        mLoading.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError()
+                    {
+                        // Log it
+                        Log.e(Logging.TAG, "Image load failed");
+                    }
+                });
+            }
+
+            // Load participant image
+            Picasso.with(this).load(participant.user.image).transform(new CircularImageTransformation()).into(image);
+
+            // Handle video click
+            preview.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    // Launch video
+                    new DecodeVideoAsync().execute(participant.video);
+                }
+            });
+
+            // Add to video container as a child
+            mVideoContainer.addView(participantView);
+        }
+    }
+
+    public class DecodeVideoAsync extends AsyncTask<ParticipantVideo, String, Exception>
+    {
+        ParticipantVideo mVideo;
+        ProgressDialog mLoading;
+
+        public DecodeVideoAsync()
+        {
+            // Loading dialog
+            mLoading = new ProgressDialog(ChallengeView.this);
+
+            // Prevent cancel
+            mLoading.setCancelable(false);
+
+            // Set default message
+            mLoading.setMessage(getString(R.string.loading));
+
+            // Show the progress dialog
+            mLoading.show();
+        }
+
+        @Override
+        protected Exception doInBackground(ParticipantVideo... params)
+        {
+            // Get first parameter
+            mVideo = params[0];
+
+            try
+            {
+                // Decode the base64-encoded video and save it to external storage
+                mVideo.file = VideoDecoder.decodeBase64Video(mVideo.data, ChallengeView.this);
+            }
+            catch (Exception exc)
+            {
+                // Return exception to onPostExecute
+                return exc;
+            }
+
+            // We're good!
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Exception exc)
+        {
+            // Activity dead?
+            if (isFinishing())
+            {
+                return;
+            }
+
+            // Hide loading
+            if (mLoading.isShowing())
+            {
+                mLoading.dismiss();
+            }
+
+            // Success?
+            if ( exc == null )
+            {
+                // We can now play the video
+                playParticipantVideo(mVideo);
+            }
+            else
+            {
+                // Log it
+                Log.e(Logging.TAG, "Video decode failed", exc);
+
+                // Build the dialog
+                AlertDialogBuilder.showGenericDialog(getString(R.string.error), exc.toString(), ChallengeView.this, null);
+            }
+        }
+    }
+
+    private void playParticipantVideo(ParticipantVideo video)
+    {
+        // Gotta have a locally-saved video for this to work
+        if ( StringUtils.stringIsNullOrEmpty(video.file))
+        {
+            return;
+        }
+
+        // Create a new player (recreate it every time)
+        MediaPlayer player = new MediaPlayer();
+
+        try
+        {
+            // Set path to video file
+            player.setDataSource(video.file);
+
+            // Prepare the media player (must call before start())
+            player.prepare();
+
+            // Finally, start playing the video file (in a new window)
+            player.start();
+        }
+        catch( Exception exc )
+        {
+            // Log it
+            Log.e(Logging.TAG, "Video play failed", exc);
+
+            // Build the dialog
+            AlertDialogBuilder.showGenericDialog(getString(R.string.error), exc.toString(), ChallengeView.this, null);
         }
     }
 

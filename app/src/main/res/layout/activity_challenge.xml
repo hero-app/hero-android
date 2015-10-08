@@ -261,7 +261,6 @@
                     android:layout_height="wrap_content"/>
 
                 <!-- Participant Videos -->
-
                 <LinearLayout
                     android:id="@+id/videoContainer"
                     android:orientation="vertical"

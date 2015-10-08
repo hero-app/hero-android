@@ -55,7 +55,7 @@ public class ChallengeAdapter extends ArrayAdapter<Challenge>
             // Get inflater service
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            // Inflate the alert layout
+            // Inflate the layout
             convertView = layoutInflater.inflate(mLayoutResource, null);
 
             // Create a new view holder
