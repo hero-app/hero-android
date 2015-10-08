@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
+import com.facebook.appevents.AppEventsLogger;
 import com.hero.fragments.NavigationDrawerFragment;
 import com.hero.R;
 import com.hero.utils.Settings;
@@ -44,6 +45,24 @@ public class Main extends Activity implements NavigationDrawerFragment.Navigatio
             // Go to login
             navigateToLogin();
         }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        // Logs 'install' and 'app activate' App Events
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        // Logs 'app deactivate' App Event
+        AppEventsLogger.deactivateApp(this);
     }
 
     private void navigateToLogin()

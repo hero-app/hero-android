@@ -17,7 +17,18 @@ public class Settings
     public static String getUserKey(Context context)
     {
         // Get saved preference
-        return Singleton.getSharedPreferences(context).getString(context.getString(R.string.user_key), null);
+        return getStringPreference(R.string.user_key, context);
+    }
 
+    public static String getStringPreference(int preference, Context context)
+    {
+        // Get saved preference
+        return Singleton.getSharedPreferences(context).getString(context.getString(preference), null);
+    }
+
+    public static void setStringPreference(int preference, String value, Context context)
+    {
+        // Save value in SharedPreferences
+        Singleton.getSharedPreferences(context).edit().putString(context.getString(preference), value).commit();
     }
 }

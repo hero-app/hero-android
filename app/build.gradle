@@ -40,6 +40,9 @@ dependencies {
     // AppCompat Dependency
     compile 'com.android.support:support-v4:22.2.0'
 
+    // Facebook SDK
+    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
+
     // Jackson JSON Parser Dependencies
     compile(
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],

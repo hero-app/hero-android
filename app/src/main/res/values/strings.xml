@@ -14,5 +14,15 @@
     <string name="title_activity_login">Login</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="facebook_app_id">876313822454630</string>
+    <string name="loginDescription">You must log in with Facebook to use Hero.</string>
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="okay">OK</string>
+    <string name="loginFailed">Login failed. Please try again later.</string>
+    <string name="user_name">user_name</string>
     <string name="user_key">user_key</string>
+    <string name="user_image">user_image</string>
+    <string name="user_id">user_id</string>
+    <string name="user_fbid">user_fbid</string>
 </resources>
