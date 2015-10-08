@@ -2,9 +2,11 @@
 <resources>
     <color name="primary">#f44336</color>
     <color name="primary_dark">#a93029</color>
-    <color name="accent">#ebebeb</color>
+    <color name="accent">#efefef</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="transparent">#ffffffff</color>
     <color name="text">#333333</color>
+    <color name="text_faded">#777777</color>
+    <color name="separator">#ebebeb</color>
 </resources>

@@ -21,6 +21,9 @@ public class Challenge
     @JsonProperty("description")
     public String description;
 
+    @JsonProperty("creation_date")
+    public long creationDate;
+
     @JsonProperty("category")
     public String category;
 

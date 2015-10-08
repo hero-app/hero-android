@@ -25,4 +25,12 @@
     <string name="user_fbid">user_fbid</string>
     <string name="placeHolder">Placeholder</string>
     <string name="title_activity_challenge">Challenge</string>
+    <string name="createdBy">by</string>
+    <string name="separator">&#8226;</string>
+    <string name="pledgedPlaceholder">$100</string>
+    <string name="pledged">pledged</string>
+    <string name="donatedToCharity">to charity</string>
+    <string name="donatedPlaceholder">$20</string>
+    <string name="rules">Rules</string>
+    <string name="videos">Videos</string>
 </resources>

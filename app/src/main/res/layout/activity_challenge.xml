@@ -1,12 +1,273 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Main Card -->
+        <LinearLayout
+        android:padding="1dp"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+            <!-- Image -->
+            <RelativeLayout
+                android:orientation="vertical"
+                android:background="@color/white"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.hero.activities.ChallengeView">
+                android:layout_height="wrap_content">
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="fill_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="centerCrop"/>
 
-</RelativeLayout>
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:indeterminate="true"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+            <!-- Details -->
+            <LinearLayout
+                android:padding="20dp"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:textSize="26sp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/placeHolder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+                <!-- Creator -->
+                <LinearLayout
+                    android:layout_marginBottom="20dp"
+                    android:orientation="horizontal"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/creatorImage"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:scaleType="centerCrop"
+                        android:layout_marginTop="3dp"
+                        android:src="@mipmap/ic_launcher"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"/>
+
+                    <TextView
+                        android:id="@+id/creatorName"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="4dp"
+                        android:text="@string/placeHolder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:textSize="13sp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/separator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_faded"/>
+
+                    <TextView
+                        android:id="@+id/category"
+                        android:textSize="13sp"
+                        android:paddingTop="2dp"
+                        android:text="@string/placeHolder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:textSize="13sp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/separator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_faded"/>
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:textSize="13sp"
+                        android:paddingTop="2dp"
+                        android:text="@string/placeHolder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/description"
+                    android:textSize="16sp"
+                    android:text="@string/placeHolder"
+                    android:gravity="left"
+                    android:textColor="@color/text_faded"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/separator"
+                android:layout_width="match_parent"
+                android:layout_height="3px" />
+
+            <!-- Money-related -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:padding="20dp"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/reward"
+                        android:textSize="28sp"
+                        android:text="@string/pledgedPlaceholder"
+                        android:gravity="center"
+                        android:layout_marginBottom="5dp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="14sp"
+                        android:text="@string/pledged"
+                        android:layout_gravity="center"
+                        android:drawablePadding="3dp"
+                        android:drawableLeft="@drawable/ic_money"
+                        android:textColor="@color/text_faded"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:padding="20dp"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/donated"
+                        android:textSize="28sp"
+                        android:text="@string/donatedPlaceholder"
+                        android:gravity="center"
+                        android:layout_marginBottom="5dp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="14sp"
+                        android:text="@string/donatedToCharity"
+                        android:layout_gravity="center"
+                        android:drawablePadding="4dp"
+                        android:drawableLeft="@drawable/ic_charity"
+                        android:textColor="@color/text_faded"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Rules -->
+        <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:padding="20dp"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textSize="20sp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="@string/rules"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/rules"
+                    android:textSize="16sp"
+                    android:gravity="left"
+                    android:text="@string/placeHolder"
+                    android:textColor="@color/text_faded"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Videos -->
+        <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:padding="20dp"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textSize="20sp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="@string/videos"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <!-- Participant Videos -->
+
+                <LinearLayout
+                    android:id="@+id/videoContainer"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ public class Feed extends Fragment
     boolean mIsReloading;
 
     ProgressBar mLoading;
+    SwipeRefreshLayout mSwipeContainer;
 
     ListView mChallengeList;
     ChallengeAdapter mChallengeAdapter;
@@ -50,6 +52,26 @@ public class Feed extends Fragment
         // View caching
         mLoading = (ProgressBar)rootView.findViewById(R.id.loading);
         mChallengeList = (ListView)rootView.findViewById(R.id.challenges);
+
+        // Swipe to refresh
+        mSwipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer);
+
+        // Setup refresh listener which triggers new data loading
+        mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh()
+            {
+                // Reload feed
+                if ( ! mIsReloading )
+                {
+                    new LoadFeedAsync().execute();
+                }
+            }
+        });
+
+
+        // Change progress bar color (we need @color/accent to be grey for sidebar)
+        mLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.primary), android.graphics.PorterDuff.Mode.SRC_IN);
 
         // Adapter init
         mChallengeAdapter = new ChallengeAdapter(getActivity(), mDisplayedChallenges, R.layout.list_item_challenge);
@@ -118,6 +140,9 @@ public class Feed extends Fragment
 
         // Items changed
         mChallengeAdapter.notifyDataSetChanged();
+
+        // Hide pull to refresh
+        mSwipeContainer.setRefreshing(false);
     }
 
     public class LoadFeedAsync extends AsyncTask<Integer, String, Exception>

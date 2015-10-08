@@ -1,55 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="20dp"
+    android:padding="1dp"
     android:orientation="vertical"
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"/>
-
-    <LinearLayout
-        android:gravity="left"
-        android:layout_marginLeft="15dp"
+    <!-- Image -->
+    <RelativeLayout
         android:orientation="vertical"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/image"
-        android:layout_width="fill_parent"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"/>
+
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:indeterminate="true"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <!-- Details -->
+    <LinearLayout
+        android:padding="20dp"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/title"
-            android:textSize="18sp"
+            android:textSize="26sp"
             android:ellipsize="end"
             android:singleLine="true"
+            android:layout_marginBottom="5dp"
             android:text="@string/placeHolder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+
+        <!-- Creator -->
+        <LinearLayout
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/creatorImage"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="3dp"
+                android:src="@mipmap/ic_launcher"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"/>
+
+            <TextView
+                android:id="@+id/creatorName"
+                android:textSize="14sp"
+                android:layout_marginLeft="4dp"
+                android:text="@string/placeHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:textSize="13sp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="5dp"
+                android:text="@string/separator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_faded"/>
+
+            <TextView
+                android:id="@+id/category"
+                android:textSize="13sp"
+                android:paddingTop="2dp"
+                android:text="@string/placeHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textSize="13sp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="5dp"
+                android:text="@string/separator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_faded"/>
+
+            <TextView
+                android:id="@+id/date"
+                android:textSize="13sp"
+                android:paddingTop="2dp"
+                android:text="@string/placeHolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/areaNames"
-            android:textSize="14sp"
+            android:id="@+id/description"
+            android:textSize="16sp"
             android:text="@string/placeHolder"
             android:gravity="left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/time"
-            android:ellipsize="end"
-            android:textSize="12sp"
-            android:paddingTop="2dp"
-            android:singleLine="true"
-            android:text="@string/placeHolder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textColor="@color/text_faded"
+            android:layout_marginBottom="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:ellipsize="end" />
     </LinearLayout>
-</RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/separator"
+        android:layout_width="match_parent"
+        android:layout_height="3px" />
+
+    <!-- Money-related -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:padding="20dp"
+            android:layout_weight="0.5"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/reward"
+                android:textSize="28sp"
+                android:text="@string/pledgedPlaceholder"
+                android:gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="14sp"
+                android:text="@string/pledged"
+                android:layout_gravity="center"
+                android:drawablePadding="3dp"
+                android:drawableLeft="@drawable/ic_money"
+                android:textColor="@color/text_faded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:padding="20dp"
+            android:layout_weight="0.5"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/donated"
+                android:textSize="28sp"
+                android:text="@string/donatedPlaceholder"
+                android:gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="14sp"
+                android:text="@string/donatedToCharity"
+                android:layout_gravity="center"
+                android:drawablePadding="4dp"
+                android:drawableLeft="@drawable/ic_charity"
+                android:textColor="@color/text_faded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -40,6 +40,9 @@ dependencies {
     // AppCompat Dependency
     compile 'com.android.support:support-v4:22.2.0'
 
+    // Picasso (Android Image Library)
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
     // Facebook SDK
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
 
