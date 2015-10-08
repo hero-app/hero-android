@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 
 import com.hero.fragments.NavigationDrawerFragment;
 import com.hero.R;
+import com.hero.utils.Settings;
 
 public class Main extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks
 {
@@ -32,6 +34,30 @@ public class Main extends Activity implements NavigationDrawerFragment.Navigatio
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        // First time here?
+        if ( !Settings.isLoggedIn(this) )
+        {
+            // Go to login
+            navigateToLogin();
+            return;
+        }
+
+        // Set up navigation drawer
+        initializeUI();
+    }
+
+    private void navigateToLogin()
+    {
+        // Go to login
+        startActivity(new Intent().setClass(this, Login.class));
+
+        // All done here
+        finish();
+    }
+
+    private void initializeUI()
+    {
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -59,13 +85,13 @@ public class Main extends Activity implements NavigationDrawerFragment.Navigatio
         switch (number)
         {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.title_feed);
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                mTitle = getString(R.string.title_discover);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.title_my_challenges);
                 break;
         }
     }

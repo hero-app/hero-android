@@ -17,9 +17,34 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    // Fixes "Duplicate files copied in APK" build bug due to Jackson libraries
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
 }
 
 dependencies {
+    // External .jar Libraries
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // AppCompat Dependency
     compile 'com.android.support:support-v4:22.2.0'
+
+    // Jackson JSON Parser Dependencies
+    compile(
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3']
+    )
+
 }
