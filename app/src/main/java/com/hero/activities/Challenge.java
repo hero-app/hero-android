@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -29,6 +30,7 @@ import com.hero.utils.media.VideoDecoder;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.Date;
 
 public class Challenge extends Activity
@@ -296,10 +298,10 @@ public class Challenge extends Activity
         }
 
         // Create a new player (recreate it every time)
-        Intent videoIntent = new Intent(this, Video.class);
+        Intent videoIntent = new Intent(Intent.ACTION_VIEW);
 
         // Set video path
-        videoIntent.putExtra(VideoActivityExtras.VIDEO_PATH, video.file);
+        videoIntent.setDataAndType(Uri.fromFile(new File(video.file)), "video/*");
 
         // Start video activity
         startActivity(videoIntent);
