@@ -40,6 +40,9 @@ dependencies {
     // AppCompat Dependency
     compile 'com.android.support:support-v4:22.2.0'
 
+    // Braintree SDK
+    compile 'com.braintreepayments.api:braintree:1.+'
+
     // Picasso (Android Image Library)
     compile 'com.squareup.picasso:picasso:2.5.2'
 

@@ -154,7 +154,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:id="@+id/reward"
+                        android:id="@+id/pledged"
                         android:textSize="28sp"
                         android:text="@string/pledgedPlaceholder"
                         android:gravity="center"

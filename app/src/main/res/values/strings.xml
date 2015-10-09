@@ -30,8 +30,11 @@
     <string name="pledgedPlaceholder">$100</string>
     <string name="pledged">pledged</string>
     <string name="donatedToCharity">to charity</string>
-    <string name="donatedPlaceholder">$20</string>
+    <string name="donatedPlaceholder">$15</string>
     <string name="rules">Rules</string>
     <string name="videos">Videos</string>
     <string name="title_activity_video">Video</string>
+    <string name="success">Success</string>
+    <string name="pledgeSuccess">Thank you! You are now officially a backer of this challenge.</string>
+    <string name="pledgeFailed">Pledge failed. Please try again later.</string>
 </resources>

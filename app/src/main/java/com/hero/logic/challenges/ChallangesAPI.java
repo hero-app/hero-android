@@ -3,14 +3,11 @@ package com.hero.logic.challenges;
 import android.content.Context;
 import android.util.Log;
 
-import com.hero.R;
 import com.hero.config.API;
 import com.hero.config.Logging;
 import com.hero.model.Challenge;
 import com.hero.model.request.challenges.FeedResponse;
 import com.hero.model.request.common.AuthenticatedRequest;
-import com.hero.model.request.login.LoginRequest;
-import com.hero.model.response.login.LoginResponse;
 import com.hero.utils.Settings;
 import com.hero.utils.caching.Singleton;
 import com.hero.utils.networking.HTTP;

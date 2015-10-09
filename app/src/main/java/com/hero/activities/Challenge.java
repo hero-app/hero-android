@@ -16,10 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.braintreepayments.api.dropin.BraintreePaymentActivity;
 import com.hero.R;
 import com.hero.config.Logging;
+import com.hero.constants.BraintreeConstants;
 import com.hero.constants.ChallengeActivityExtras;
-import com.hero.constants.VideoActivityExtras;
+import com.hero.logic.payments.Braintree;
 import com.hero.model.Participant;
 import com.hero.model.ParticipantVideo;
 import com.hero.ui.AlertDialogBuilder;
@@ -40,6 +42,7 @@ public class Challenge extends Activity
     TextView mRules;
     TextView mTitle;
     TextView mDate;
+    TextView mPledged;
     TextView mDescription;
     TextView mCategory;
     TextView mCreatorName;
@@ -75,12 +78,24 @@ public class Challenge extends Activity
         mTitle = (TextView) findViewById(R.id.title);
         mRules = (TextView) findViewById(R.id.rules);
         mImage = (ImageView) findViewById(R.id.image);
+        mPledged = (TextView) findViewById(R.id.pledged);
         mCategory = (TextView) findViewById(R.id.category);
         mLoading = (ProgressBar) findViewById(R.id.loading);
         mDescription = (TextView) findViewById(R.id.description);
         mCreatorName = (TextView) findViewById(R.id.creatorName);
         mCreatorImage = (ImageView) findViewById(R.id.creatorImage);
         mVideoContainer = (LinearLayout) findViewById(R.id.videoContainer);
+
+        // Pledegd text click
+        mPledged.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                // Get token and show Braintree payment activity
+                new GetBraintreeTokenAsync().execute();
+            }
+        });
 
         // Change progress bar color (we need @color/accent to be grey for sidebar)
         mLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.primary), android.graphics.PorterDuff.Mode.SRC_IN);
@@ -282,6 +297,168 @@ public class Challenge extends Activity
             {
                 // Log it
                 Log.e(Logging.TAG, "Video decode failed", exc);
+
+                // Build the dialog
+                AlertDialogBuilder.showGenericDialog(getString(R.string.error), exc.toString(), Challenge.this, null);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        // Braintree response?
+        if (requestCode == BraintreeConstants.ACTIVITY_REQUEST_CODE)
+        {
+            // We good?
+            if (resultCode == BraintreePaymentActivity.RESULT_OK)
+            {
+                // Extract nonce
+                String paymentMethodNonce = data.getStringExtra(BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE);
+
+                // Send to server and pledge money
+                new PledgePaymentAsync().execute(paymentMethodNonce);
+            }
+        }
+    }
+
+    public class PledgePaymentAsync extends AsyncTask<String, String, Exception>
+    {
+        ProgressDialog mLoading;
+
+        public PledgePaymentAsync()
+        {
+            // Loading dialog
+            mLoading = new ProgressDialog(Challenge.this);
+
+            // Prevent cancel
+            mLoading.setCancelable(false);
+
+            // Set default message
+            mLoading.setMessage(getString(R.string.loading));
+
+            // Show the progress dialog
+            mLoading.show();
+        }
+
+        @Override
+        protected Exception doInBackground(String... params)
+        {
+            // Grab nonce from params
+            String nonce = params[0];
+
+            // Pledge a dollar
+            double amount = 1.0;
+
+            try
+            {
+                // Actually pledge via Braintree
+                Braintree.pledgeChallenge(mChallenge.id, nonce, amount, Challenge.this);
+            }
+            catch (Exception exc)
+            {
+                // Return exception to onPostExecute
+                return exc;
+            }
+
+            // We're good!
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Exception exc)
+        {
+            // Activity dead?
+            if (isFinishing())
+            {
+                return;
+            }
+
+            // Hide loading
+            if (mLoading.isShowing())
+            {
+                mLoading.dismiss();
+            }
+
+            // Failed?
+            if ( exc != null )
+            {
+                // Log it
+                Log.e(Logging.TAG, "Nonce send failed", exc);
+
+                // Build the dialog
+                AlertDialogBuilder.showGenericDialog(getString(R.string.error), exc.toString(), Challenge.this, null);
+            }
+            else
+            {
+                // Build the dialog
+                AlertDialogBuilder.showGenericDialog(getString(R.string.success), getString(R.string.pledgeSuccess), Challenge.this, null);
+            }
+        }
+    }
+
+    public class GetBraintreeTokenAsync extends AsyncTask<Integer, String, Exception>
+    {
+        ProgressDialog mLoading;
+
+        public GetBraintreeTokenAsync()
+        {
+            // Loading dialog
+            mLoading = new ProgressDialog(Challenge.this);
+
+            // Prevent cancel
+            mLoading.setCancelable(false);
+
+            // Set default message
+            mLoading.setMessage(getString(R.string.loading));
+
+            // Show the progress dialog
+            mLoading.show();
+        }
+
+        @Override
+        protected Exception doInBackground(Integer... params)
+        {
+            try
+            {
+                // Grab the actual token
+                String token = Braintree.getClientToken(Challenge.this);
+
+                // Start the auth activity
+                Intent intent = new Intent(Challenge.this, BraintreePaymentActivity.class);
+                intent.putExtra(BraintreePaymentActivity.EXTRA_CLIENT_TOKEN, token);
+                startActivityForResult(intent, BraintreeConstants.ACTIVITY_REQUEST_CODE);
+            }
+            catch (Exception exc)
+            {
+                // Return exception to onPostExecute
+                return exc;
+            }
+
+            // We're good!
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Exception exc)
+        {
+            // Activity dead?
+            if (isFinishing())
+            {
+                return;
+            }
+
+            // Hide loading
+            if (mLoading.isShowing())
+            {
+                mLoading.dismiss();
+            }
+
+            // Failed?
+            if ( exc != null )
+            {
+                // Log it
+                Log.e(Logging.TAG, "Client token generation failed", exc);
 
                 // Build the dialog
                 AlertDialogBuilder.showGenericDialog(getString(R.string.error), exc.toString(), Challenge.this, null);
